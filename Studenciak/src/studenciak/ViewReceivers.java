@@ -1,5 +1,7 @@
 package studenciak;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -61,7 +63,14 @@ public class ViewReceivers extends javax.swing.JFrame {
             jl[a].setText(jl[a].getText()+j[a]);
         }
     }
-    public ViewReceivers() {
+    //jak nie pojdzie Receiver chociaz powinien to object a potem castowanie
+    //w kazdym razie mozesz zalozyc ze to dziala //if true then returns only binary, otherwise returns digitals
+    private List<Receiver> getSelectedReceivers(boolean binary)
+    {
+        return null;
+    }
+    public ViewReceivers()
+    {
         initComponents();
         setCFGData();
         setTable();
@@ -95,6 +104,7 @@ public class ViewReceivers extends javax.swing.JFrame {
                 "Nazwa", "Typ", "Min", "Max"
             }
         ));
+        jTable2.setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         jScrollPane2.setViewportView(jTable2);
 
         station_name.setText("Nazwa stacji: ");
