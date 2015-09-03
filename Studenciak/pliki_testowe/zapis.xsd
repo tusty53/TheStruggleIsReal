@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 2014 (c) Andrzej Kwapisz -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="COMTRADE">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="INFO" type="conversionInfo" minOccurs="1" maxOccurs="1"/>
+				<xs:element  name="CFG" minOccurs="1" maxOccurs="1">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="STATION" type="stationInfo" minOccurs="1" maxOccurs="1"/>
+							<xs:element name="CHANELS" type="chanelsCount" minOccurs="1" maxOccurs="1"/>
+							<xs:element name="FREQUENCY" type="freq" minOccurs="1" maxOccurs="1"/>
+							<xs:element name="SAMPLING_FREQ_COUNT" type="xs:positiveInteger" minOccurs="1" maxOccurs="1" fixed="1"/>
+							<xs:element name="SAMPLING_DATA" type="freqSampling" minOccurs="1" maxOccurs="1"/>
+							<xs:element name="FIRST_SAMPLE_TIME" type="timeStamp" minOccurs="1" maxOccurs="1"/>
+							<xs:element name="LAST_SAMPLE_TIME" type="timeStamp" minOccurs="1" maxOccurs="1"/>
+							<xs:element name="DATA_FORMAT" type="dataFormat" minOccurs="1" maxOccurs="1"/>
+							<xs:element name="TIME_MULTIPLICATION" type="xs:positiveInteger" default="1" minOccurs="1" maxOccurs="1"/>
+							<xs:element name="ANALOG_CHANELS_DATA" type="analogChanels" minOccurs="1" maxOccurs="1"/>  
+							<xs:element name="DIGITAL_CHANELS_DATA" type="digitalChanels" minOccurs="1" maxOccurs="1"/>  
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:simpleType name="strAlbum">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="5"/>
+			<xs:maxLength value="7"/>
+			<xs:pattern value="[0-9]{5,6}[D]?"/>
+		</xs:restriction>
+	</xs:simpleType> 	
+	<xs:simpleType name="binaryState">
+		<xs:restriction base="xs:nonNegativeInteger">
+			<xs:minInclusive value="0"/>
+			<xs:maxInclusive value="1"/>
+		</xs:restriction>
+	</xs:simpleType> 	
+	<xs:simpleType name="phaseID">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="0"/>
+			<xs:maxLength value="2"/>
+			<xs:pattern value="[ABCRST123PN0]{0,1}[rima]{0,1}"/>
+		</xs:restriction>
+	</xs:simpleType> 	
+	<xs:simpleType name="counter">
+		<xs:restriction base="xs:positiveInteger">
+			<xs:minInclusive value="1"/>
+			<xs:maxInclusive value="999999"/>
+		</xs:restriction>
+	</xs:simpleType> 
+	<xs:simpleType name="counter0">
+		<xs:restriction base="xs:nonNegativeInteger">
+			<xs:minInclusive value="0"/>
+			<xs:maxInclusive value="999999"/>
+		</xs:restriction>
+	</xs:simpleType> 
+    <xs:simpleType name="dataFormat">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="ASCII|BINARY"/>
+        </xs:restriction>
+    </xs:simpleType>
+	<xs:simpleType name="float32Positive">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="32"/>
+			<xs:pattern value="\d*\.?\d*"/>
+		</xs:restriction>
+	</xs:simpleType> 
+	<xs:simpleType name="float32">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="32"/>
+			<xs:pattern value="[+-]?\d*\.?\d*"/>
+		</xs:restriction>
+	</xs:simpleType>  	
+	<xs:simpleType name="float32e">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="0"/>
+			<xs:maxLength value="32"/>
+			<xs:pattern value="[+-]?\d*\.?\d*"/>
+		</xs:restriction>
+	</xs:simpleType>  	
+	<xs:complexType name="freq">
+		<xs:simpleContent>
+			<xs:extension base="float32Positive">
+				<xs:attribute name="unit" type="xs:string" use="required" fixed="Hz"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="freqSampling">
+		<xs:sequence>
+			<xs:element name="Sampling_frequency" type="freq"/>
+			<xs:element name="Last_sample_number" type="xs:positiveInteger" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="minMax">
+		<xs:restriction base="xs:float">
+			<xs:minInclusive value="-999999"/>
+			<xs:maxInclusive value="999999"/>
+		</xs:restriction>
+	</xs:simpleType> 	
+	<xs:simpleType name="string32">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="32"/>
+		</xs:restriction>
+	</xs:simpleType>	
+	<xs:simpleType name="string64">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="64"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string64e">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="0"/>
+			<xs:maxLength value="64"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="sygnal_nr">
+		<xs:simpleContent>
+			<xs:extension base="xs:positiveInteger">
+				<xs:attribute name="nr" type="xs:positiveInteger" use="required"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:simpleType name="timeStamp">
+            <xs:restriction base="xs:string">
+				<xs:minLength value="26"/>
+				<xs:maxLength value="26"/>				
+                <xs:pattern value="[0-9]{2}/[0-9]{2}/[0-9]{4},[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{6}"/>
+            </xs:restriction>
+    </xs:simpleType>
+	<xs:simpleType name="units">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="0"/>
+			<xs:maxLength value="4"/>
+			<xs:pattern value="[pnumhkMGT]{0,1}([AFHKSVWYs]{0,1}|(var|VA|Ohm|deg|rad|mag|Cel|Far))"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="winding">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="1"/>
+			<xs:pattern value="P|S"/>
+		</xs:restriction>
+	</xs:simpleType>	
+	<xs:complexType name="conversionInfo">
+		<xs:sequence> 
+			<xs:element name="album" minOccurs="1" maxOccurs="1" type="strAlbum"/>
+			<xs:element name="nazwisko" minOccurs="1" maxOccurs="1" type="string64"/>
+			<xs:element name="imie" minOccurs="1" maxOccurs="1" type="string64"/>
+			<xs:element name="sygnaly_zrodlowe" minOccurs="1" maxOccurs="1">
+				<xs:complexType> 		
+					<xs:sequence> 
+						<xs:element name="sygnaly_analogowe" minOccurs="1" maxOccurs="1">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="sygnal" type="sygnal_nr" minOccurs="3" maxOccurs="3"/>
+								</xs:sequence>
+							</xs:complexType>	
+						</xs:element>	
+						<xs:element name="sygnaly_cyfrowe" minOccurs="1" maxOccurs="1">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="sygnal" type="sygnal_nr" minOccurs="3" maxOccurs="3"/>
+								</xs:sequence>
+							</xs:complexType>	
+						</xs:element>	
+					</xs:sequence> 
+				</xs:complexType> 
+			</xs:element>
+		</xs:sequence> 	
+	</xs:complexType> 
+	<xs:complexType name="stationInfo">
+		<xs:sequence>
+            <xs:element name="Station_name" type="string64" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="Device_ID" minOccurs="1" maxOccurs="1">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="string64">
+							<xs:attribute name="vendor" type="string64" use="optional"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>				
+            <xs:element name="Revision" fixed="1999" type="xs:positiveInteger" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>	
+	</xs:complexType>	
+	<xs:complexType name="chanelsCount">
+		<xs:sequence>
+			<xs:element name="Total_chanels_count" type="counter0" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Analog_chanels_count" type="counter0" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Digital_chanels_count" type="counter0" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType> 
+	<xs:complexType name="analogChanels">
+		<xs:sequence>
+			<xs:element name="ANALOG_CHANEL" type="analogChanel" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="count" type="counter0" use="required"/>
+	</xs:complexType> 
+	<xs:complexType name="digitalChanels">
+		<xs:sequence>
+			<xs:element name="DIGITAL_CHANEL" type="digitalChanel" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="count" type="counter0" use="required"/>		
+	</xs:complexType> 
+	<xs:complexType name="analogChanel">
+		<xs:sequence> 
+			<xs:element name="Chanel_number" minOccurs="1" maxOccurs="1" type="counter"/>
+			<xs:element name="Chanel_name" minOccurs="1" maxOccurs="1" type="string64"/>
+			<xs:element name="Phase_ID" type="phaseID" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Monitored_component" type="string64e" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Unit" type="units" minOccurs="1" maxOccurs="1" />
+			<xs:element name="Multiplicity" type="string32" minOccurs="1" maxOccurs="1" />
+			<xs:element name="Offset" type="float32e" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Time_skew" type="float32e" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Min_value" type="float32" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Max_value" type="float32" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Primary_ratio" type="float32Positive" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Secondary_ratio" type="float32Positive" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Scaling" type="winding" maxOccurs="1" minOccurs="1"/>
+		</xs:sequence> 
+		<xs:attribute name="nr" type="xs:positiveInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="digitalChanel">
+		<xs:sequence> 
+			<xs:element name="Chanel_number" minOccurs="1" maxOccurs="1" type="counter"/>
+			<xs:element name="Chanel_name" minOccurs="1" maxOccurs="1" type="string64"/>
+			<xs:element name="Phase_ID" type="phaseID" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Monitored_component" type="string64e" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Normal_state" type="binaryState" minOccurs="1" maxOccurs="1" />
+		</xs:sequence> 
+		<xs:attribute name="nr" type="xs:positiveInteger" use="required"/>
+	</xs:complexType>   
+</xs:schema>
