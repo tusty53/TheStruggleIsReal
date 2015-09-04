@@ -1,8 +1,10 @@
 package studenciak;
 
+import generated.AnalogChanel;
 import generated.AnalogChanels;
 import generated.CFG;
 import generated.ChanelsCount;
+import generated.DigitalChanel;
 import generated.DigitalChanels;
 import generated.Freq;
 import generated.FreqSampling;
@@ -16,6 +18,10 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 
 public class Dane {
     static String station_name; //Name of substation location
@@ -210,20 +216,50 @@ public class Dane {
         ObjectFactory factory=new ObjectFactory();
         
         CFG cfg = factory.createCFG();
-        
+        try {
+            JAXBContext context = JAXBContext.newInstance(path);
+        } catch (JAXBException ex) {
+            Logger.getLogger(Dane.class.getName()).log(Level.SEVERE, null, ex);
+        }
         StationInfo stationInfo = factory.createStationInfo();
             
-        stationInfo.setRevision(BigInteger.valueOf(Integer.valueOf(rec_dev_id)));
-        stationInfo.setStationName(station_name);
-        StationInfo.DeviceID deviceID = factory.createStationInfoDeviceID();
-        deviceID.setValue(path);
-        stationInfo.setDeviceID(deviceID);
+            stationInfo.setRevision(BigInteger.valueOf(Integer.valueOf(rec_dev_id)));
+            stationInfo.setStationName(station_name);
+            StationInfo.DeviceID deviceID = factory.createStationInfoDeviceID();
+            deviceID.setValue(path);
+            stationInfo.setDeviceID(deviceID);
                 
         ChanelsCount chanelsCount = factory.createChanelsCount();
+        
+            chanelsCount.setAnalogChanelsCount(A);
+            chanelsCount.setDigitalChanelsCount(D);
+            chanelsCount.setTotalChanelsCount(TT);
+        
         Freq freq = factory.createFreq();
+        
+            freq.setUnit("Hz");
+            freq.setValue(Float.toString(If));
+        
         FreqSampling freqSampling = factory.createFreqSampling();
+        
+            freqSampling.setLastSampleNumber(BigInteger.valueOf((int)endsamp));
+            Freq freqsamp = factory.createFreq();
+                freqsamp.setUnit("Hz");
+                freqsamp.setValue(Float.toString(samp));
+            freqSampling.setSamplingFrequency(freqsamp);
+        
         AnalogChanels analogchanels = factory.createAnalogChanels();
+            analogchanels.setCount(analogs.length);
+            for (int i:analogs)
+            {
+                analogchanels.getANALOGCHANEL().add(this.makeAnal(i, factory));                
+            }
         DigitalChanels digitalchanels = factory.createDigitalChanels();
+            digitalchanels.setCount(binaries.length);
+            for (int j:binaries)
+            {
+                digitalchanels.getDIGITALCHANEL().add(this.makeDigital(j, factory));
+            }
         
         cfg.setSTATION(stationInfo);
         cfg.setCHANELS(chanelsCount);  
@@ -236,6 +272,40 @@ public class Dane {
         else cfg.setDATAFORMAT("Binary");
         cfg.setANALOGCHANELSDATA(analogchanels);
         cfg.setDIGITALCHANELSDATA(digitalchanels);
+    }
+    AnalogChanel makeAnal(int i, ObjectFactory factory){
+        
+        AnalogChanel chanel = factory.createAnalogChanel();
+        chanel.setChanelName(Analog[i].ch_id);
+        chanel.setChanelNumber(i);
+        chanel.setMaxValue(Float.toString(Analog[i].max));
+        chanel.setMinValue(Float.toString(Analog[i].min));
+        chanel.setMonitoredComponent(Analog[i].ccbm);
+        chanel.setMultiplicity(Integer.toString(Analog[i].a));
+        chanel.setNr(BigInteger.valueOf(i));
+        chanel.setOffset(Integer.toString(Analog[i].b));
+        chanel.setPhaseID(Analog[i].ph);
+        chanel.setPrimaryRatio(Integer.toString(Analog[i].primary));
+        if(Analog[i].isPrimary())
+            chanel.setScaling("P");
+        else
+            chanel.setScaling("S");
+        chanel.setSecondaryRatio(Integer.toString(Analog[i].secondary));
+        chanel.setTimeSkew(Integer.toString(Analog[i].skew));
+        chanel.setUnit(Analog[i].uu);
+        return chanel;        
+    }
+    
+    DigitalChanel makeDigital(int i, ObjectFactory factory){
+        
+        DigitalChanel digit = factory.createDigitalChanel();
+        digit.setChanelName(Binars[i].ch_id);
+        digit.setChanelNumber(i);
+        digit.setMonitoredComponent(Binars[i].ccbm);
+        digit.setNormalState(Binars[i].y);
+        digit.setNr(BigInteger.valueOf(i));
+        digit.setPhaseID(Binars[i].ph);
+        return digit;
     }
 }
     

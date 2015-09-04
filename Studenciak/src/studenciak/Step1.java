@@ -30,6 +30,11 @@ public class Step1 extends javax.swing.JFrame {
         this.current.setVisible(false);
         this.progress.setVisible(false);
     }
+    public void dataLoaded()
+    {
+        this.dispose();
+        new ViewReceivers().setVisible(true);
+    }
     class Loading extends Thread
     {
         String s1,s2;
@@ -45,6 +50,7 @@ public class Step1 extends javax.swing.JFrame {
         {
             Exception ex = Dane.loadData(s1, s2, gui);
             if (ex!=null) setError("Wystąpił błąd", ex.getMessage());
+            gui.dataLoaded();
         }
     }
 
