@@ -82,8 +82,8 @@ public class ViewReceivers extends javax.swing.JFrame {
         List<Integer> wynik = new ArrayList<>();
         for (int a=0; a<tab.length; a++)
         {
-            if (jTable2.getModel().getValueAt(tab[a],2)==Analog_text)  if (!binary) wynik.add(tab[a]);
-            else if (binary) wynik.add(tab[a]);
+            if (jTable2.getModel().getValueAt(tab[a],2)==Analog_text)  {if (!binary) wynik.add((int)jTable2.getModel().getValueAt(tab[a],0) - 1);}
+            else if (binary) wynik.add((int)jTable2.getModel().getValueAt(tab[a],0) - 1);
         }
         return wynik;
     }
@@ -217,7 +217,7 @@ public class ViewReceivers extends javax.swing.JFrame {
         String resultPath = gsp.getPath();
         if (resultPath!=null) 
         {
-            Exception xml = Dane.makeXML(resultPath, binars, analogs);
+            Exception xml = Dane.makeXML(resultPath, analogs, binars);
             if (xml!=null) JOptionPane.showMessageDialog(this, "Wystąpił błąd: "+xml.getMessage());
         }
     }//GEN-LAST:event_jButton1ActionPerformed

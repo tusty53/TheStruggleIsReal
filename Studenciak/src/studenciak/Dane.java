@@ -330,6 +330,7 @@ static   Exception makeXML(String path, List <Integer> analogs,List <Integer> bi
     static DigitalChanel makeDigital(int i, ObjectFactory factory){
         
         DigitalChanel digit = factory.createDigitalChanel();
+        System.out.println(String.valueOf(i));
         digit.setChanelName(Binars[i].ch_id);
         digit.setChanelNumber(i+1);
         digit.setMonitoredComponent(Binars[i].ccbm);

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<CFG>
+    <STATION>
+        <Station_name>﻿Politechnika Poznańska</Station_name>
+        <Device_ID>asdas.xml</Device_ID>
+        <Revision>199</Revision>
+    </STATION>
+    <CHANELS>
+        <Total_chanels_count>93</Total_chanels_count>
+        <Analog_chanels_count>31</Analog_chanels_count>
+        <Digital_chanels_count>62</Digital_chanels_count>
+    </CHANELS>
+    <FREQUENCY unit="Hz">50.0</FREQUENCY>
+    <SAMPLING_FREQ_COUNT>1</SAMPLING_FREQ_COUNT>
+    <SAMPLING_DATA>
+        <Sampling_frequency unit="Hz">12500.0</Sampling_frequency>
+        <Last_sample_number>100</Last_sample_number>
+    </SAMPLING_DATA>
+    <FIRST_SAMPLE_TIME>12/06/2014 12:00:10.999999</FIRST_SAMPLE_TIME>
+    <LAST_SAMPLE_TIME>12/06/2014 12:00:11.799995</LAST_SAMPLE_TIME>
+    <DATA_FORMAT>ASCII</DATA_FORMAT>
+    <ANALOG_CHANELS_DATA count="0"/>
+    <DIGITAL_CHANELS_DATA count="1">
+        <DIGITAL_CHANEL nr="17">
+            <Chanel_number>17</Chanel_number>
+            <Chanel_name>Dwustan#0017</Chanel_name>
+            <Phase_ID>B</Phase_ID>
+            <Monitored_component>Obwod</Monitored_component>
+            <Normal_state>1</Normal_state>
+        </DIGITAL_CHANEL>
+    </DIGITAL_CHANELS_DATA>
+</CFG>

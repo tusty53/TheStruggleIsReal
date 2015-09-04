@@ -2,7 +2,7 @@
 <CFG>
     <STATION>
         <Station_name>﻿Politechnika Poznańska</Station_name>
-        <Device_ID>export.xml</Device_ID>
+        <Device_ID>ex.xml</Device_ID>
         <Revision>199</Revision>
     </STATION>
     <CHANELS>
@@ -20,58 +20,51 @@
     <LAST_SAMPLE_TIME>12/06/2014 12:00:11.799995</LAST_SAMPLE_TIME>
     <DATA_FORMAT>ASCII</DATA_FORMAT>
     <ANALOG_CHANELS_DATA count="2">
-        <ANALOG_CHANEL nr="16">
-            <Chanel_number>16</Chanel_number>
-            <Chanel_name>Analog#0016</Chanel_name>
+        <ANALOG_CHANEL nr="19">
+            <Chanel_number>19</Chanel_number>
+            <Chanel_name>Analog#0019</Chanel_name>
             <Phase_ID>r</Phase_ID>
             <Monitored_component>[brak]</Monitored_component>
             <Unit>kA</Unit>
             <Multiplicity>1</Multiplicity>
             <Offset>0</Offset>
             <Time_skew>0</Time_skew>
-            <Min_value>-16.3482</Min_value>
-            <Max_value>21.5125</Max_value>
+            <Min_value>-23.7329</Min_value>
+            <Max_value>25.3646</Max_value>
             <Primary_ratio>1</Primary_ratio>
             <Secondary_ratio>1</Secondary_ratio>
             <Scaling>P</Scaling>
         </ANALOG_CHANEL>
-        <ANALOG_CHANEL nr="28">
-            <Chanel_number>28</Chanel_number>
-            <Chanel_name>Analog#0028</Chanel_name>
+        <ANALOG_CHANEL nr="23">
+            <Chanel_number>23</Chanel_number>
+            <Chanel_name>Analog#0023</Chanel_name>
             <Phase_ID>r</Phase_ID>
             <Monitored_component>[brak]</Monitored_component>
             <Unit>kA</Unit>
             <Multiplicity>1</Multiplicity>
             <Offset>0</Offset>
             <Time_skew>0</Time_skew>
-            <Min_value>0.0</Min_value>
-            <Max_value>4.3287</Max_value>
+            <Min_value>0.316</Min_value>
+            <Max_value>7.1</Max_value>
             <Primary_ratio>1</Primary_ratio>
             <Secondary_ratio>1</Secondary_ratio>
             <Scaling>P</Scaling>
         </ANALOG_CHANEL>
     </ANALOG_CHANELS_DATA>
-    <DIGITAL_CHANELS_DATA count="3">
-        <DIGITAL_CHANEL nr="4">
-            <Chanel_number>4</Chanel_number>
-            <Chanel_name>Dwustan#0004</Chanel_name>
+    <DIGITAL_CHANELS_DATA count="2">
+        <DIGITAL_CHANEL nr="19">
+            <Chanel_number>19</Chanel_number>
+            <Chanel_name>Dwustan#0019</Chanel_name>
+            <Phase_ID>B</Phase_ID>
+            <Monitored_component>Obwod</Monitored_component>
+            <Normal_state>0</Normal_state>
+        </DIGITAL_CHANEL>
+        <DIGITAL_CHANEL nr="23">
+            <Chanel_number>23</Chanel_number>
+            <Chanel_name>Dwustan#0023</Chanel_name>
             <Phase_ID>B</Phase_ID>
             <Monitored_component>Obwod</Monitored_component>
             <Normal_state>1</Normal_state>
-        </DIGITAL_CHANEL>
-        <DIGITAL_CHANEL nr="5">
-            <Chanel_number>5</Chanel_number>
-            <Chanel_name>Dwustan#0005</Chanel_name>
-            <Phase_ID>B</Phase_ID>
-            <Monitored_component>Obwod</Monitored_component>
-            <Normal_state>0</Normal_state>
-        </DIGITAL_CHANEL>
-        <DIGITAL_CHANEL nr="36">
-            <Chanel_number>36</Chanel_number>
-            <Chanel_name>Dwustan#0036</Chanel_name>
-            <Phase_ID>B</Phase_ID>
-            <Monitored_component>Obwod</Monitored_component>
-            <Normal_state>0</Normal_state>
         </DIGITAL_CHANEL>
     </DIGITAL_CHANELS_DATA>
 </CFG>
