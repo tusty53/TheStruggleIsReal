@@ -1,5 +1,7 @@
 package studenciak;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JLabel;
@@ -7,6 +9,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 
 public class ViewReceivers extends javax.swing.JFrame {
 
@@ -100,6 +108,7 @@ public class ViewReceivers extends javax.swing.JFrame {
         D = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -139,6 +148,13 @@ public class ViewReceivers extends javax.swing.JFrame {
             }
         });
 
+        jButton2.setText("jButton2");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -146,16 +162,22 @@ public class ViewReceivers extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(station_name)
-                    .addComponent(rec_dev_id)
-                    .addComponent(rev_year)
-                    .addComponent(TT)
-                    .addComponent(A)
-                    .addComponent(jLabel1)
-                    .addComponent(D)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 581, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
-                .addContainerGap(37, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(station_name)
+                            .addComponent(rec_dev_id)
+                            .addComponent(rev_year)
+                            .addComponent(TT)
+                            .addComponent(A)
+                            .addComponent(jLabel1)
+                            .addComponent(D)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 581, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(37, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton2)
+                        .addGap(53, 53, 53))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -177,7 +199,9 @@ public class ViewReceivers extends javax.swing.JFrame {
                 .addGap(23, 23, 23)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 491, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2))
                 .addGap(28, 28, 28))
         );
 
@@ -198,12 +222,53 @@ public class ViewReceivers extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private XYSeries getSeries(float[] data)
+    {
+         XYSeries series = new XYSeries("XYGraph");
+         for (int a=0; a<data.length; a++)
+         {
+             series.add(Dane.timestamps[a], data[a]);
+         }
+         return series;
+    }
+    private Exception saveChart(List<float[]> data, int width, int height)
+    {
+        XYSeriesCollection dataset = new XYSeriesCollection();
+        for (float[] dane : data) dataset.addSeries(getSeries(dane));
+        // Generate the graph
+        JFreeChart chart = ChartFactory.createXYLineChart(
+            "Wykres wartości od czasu", // Title
+            "Wartość", // x-axis Label
+            "Czas", // y-axis Label
+            dataset, // Dataset
+            PlotOrientation.VERTICAL, // Plot Orientation
+            true, // Show Legend
+            true, // Use tooltips
+            false // Configure chart to generate URLs?
+        );
+        try
+        {
+            ChartUtilities.saveChartAsJPEG(new File("chart.jpg"), chart, width, height);
+            return null;
+        } 
+        catch (IOException e) 
+        {
+            return new Exception("Wystąpił problem podczas zapisu wykresu.");
+        }
+    }
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    
+        
+    
+    }//GEN-LAST:event_jButton2ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel A;
     private javax.swing.JLabel D;
     private javax.swing.JLabel TT;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable2;

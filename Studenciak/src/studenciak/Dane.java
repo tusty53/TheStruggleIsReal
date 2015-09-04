@@ -31,6 +31,13 @@ import javax.xml.transform.Source;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import org.xml.sax.SAXException;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 
 public class Dane {
     static String station_name; //Name of substation location
@@ -194,6 +201,7 @@ public class Dane {
         }
         return true;
     }
+   
     /**
      * Zwraca wszystkie wyrazy jakie mamy w pliku - info dla cb tustan trza to potem usunac
      * @param from
@@ -296,7 +304,7 @@ static   Exception makeXML(String path, List <Integer> analogs,List <Integer> bi
         } 
         return null;
     }
-static    AnalogChanel makeAnal(int i, ObjectFactory factory){
+    static AnalogChanel makeAnal(int i, ObjectFactory factory){
         
         AnalogChanel chanel = factory.createAnalogChanel();
         chanel.setChanelName(Analog[i].ch_id);
@@ -319,7 +327,7 @@ static    AnalogChanel makeAnal(int i, ObjectFactory factory){
         return chanel;        
     }
     
-static    DigitalChanel makeDigital(int i, ObjectFactory factory){
+    static DigitalChanel makeDigital(int i, ObjectFactory factory){
         
         DigitalChanel digit = factory.createDigitalChanel();
         digit.setChanelName(Binars[i].ch_id);
