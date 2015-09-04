@@ -29,30 +29,34 @@ public class ViewReceivers extends javax.swing.JFrame {
                 jTable1.getColumnModel().getColumn(a).setCellRenderer(centerRenderer);
             }
     }
+    static String Analog_text = "Analog";
+    static String Binar_text = "Binar";
     private void setTable()
     {
         DefaultTableModel model = getNotEditableTable();
-        String header[] = new String[] { "Nazwa", "Typ", "Min",
+        String header[] = new String[] { "Id", "Nazwa", "Typ", "Min",
             "Max" };
         model.setRowCount(Dane.A + Dane.D);
         model.setColumnIdentifiers(header);
         for (int a=0; a<Dane.A; a++)
         {
-            model.setValueAt(Dane.Analog[a].ch_id, a, 0); //nazwa
-            model.setValueAt("Analog", a, 1); 
-            model.setValueAt(Dane.Analog[a].min, a, 2);
-            model.setValueAt(Dane.Analog[a].max, a, 3);
+            model.setValueAt(Dane.Analog[a].index, a, 0);
+            model.setValueAt(Dane.Analog[a].ch_id, a, 1); //nazwa
+            model.setValueAt(Analog_text, a, 2); 
+            model.setValueAt(Dane.Analog[a].min, a, 3);
+            model.setValueAt(Dane.Analog[a].max, a, 4);
         }
         for (int a=Dane.A; a<Dane.A+Dane.D; a++)
         {
-            model.setValueAt(Dane.Binars[a-Dane.A].ch_id, a, 0); //nazwa
-            model.setValueAt("Binar", a, 1); 
-            model.setValueAt("0", a, 2);
-            model.setValueAt("1", a, 3);
+            model.setValueAt(Dane.Binars[a-Dane.A].index, a, 0);
+            model.setValueAt(Dane.Binars[a-Dane.A].ch_id, a, 1); //nazwa
+            model.setValueAt(Binar_text, a, 2); 
+            model.setValueAt("0", a, 3);
+            model.setValueAt("1", a, 4);
         }
         jTable2.setModel(model);
         setCenterTable(jTable2);
-        jTable2.getColumnModel().getColumn(0).setPreferredWidth(500);
+        jTable2.getColumnModel().getColumn(1).setPreferredWidth(500);
     }
     private void setCFGData()
     {
@@ -63,11 +67,17 @@ public class ViewReceivers extends javax.swing.JFrame {
             jl[a].setText(jl[a].getText()+j[a]);
         }
     }
-    //jak nie pojdzie Receiver chociaz powinien to object a potem castowanie
-    //w kazdym razie mozesz zalozyc ze to dziala //if true then returns only binary, otherwise returns digitals
-    private List<Receiver> getSelectedReceivers(boolean binary)
+ //if true then returns only binary, otherwise returns digitals (indexes of static arrays)
+    private List<Integer> getSelectedReceivers(boolean binary)
     {
-        return null;
+        int[] tab = jTable2.getSelectedRows();
+        List<Integer> wynik = new ArrayList<>();
+        for (int a=0; a<tab.length; a++)
+        {
+            if (jTable2.getModel().getValueAt(tab[a],2)==Analog_text)  if (!binary) wynik.add(tab[a]);
+            else if (binary) wynik.add(tab[a]);
+        }
+        return wynik;
     }
     public ViewReceivers()
     {
@@ -176,12 +186,15 @@ public class ViewReceivers extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        List<Integer> binars = getSelectedReceivers(true);
+        List<Integer> analogs = getSelectedReceivers(false);
         GetSavePath gsp = new GetSavePath(this, true);
         gsp.setVisible(true);
         String resultPath = gsp.getPath();
         if (resultPath!=null) 
         {
-            JOptionPane.showMessageDialog(this, "Tutaj lecimy z XML");
+            Exception xml = Dane.makeXML(resultPath, binars, analogs);
+            if (xml!=null) JOptionPane.showMessageDialog(this, "Wystąpił błąd: "+xml.getMessage());
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
