@@ -221,13 +221,13 @@ public class Dane {
         return (Float.parseFloat(s1)+(float)Math.pow(10, Float.parseFloat(s2)));
     }
     
-static   Exception makeXML(String path, List <Integer> analogs,List <Integer> binaries){
+    Exception makeXML(String path, List <Integer> analogs,List <Integer> binaries){
         ObjectFactory factory=new ObjectFactory();
         
         CFG cfg = factory.createCFG();
         StationInfo stationInfo = factory.createStationInfo();
             
-            stationInfo.setRevision(BigInteger.valueOf(199));
+            stationInfo.setRevision(BigInteger.valueOf(Integer.valueOf(rec_dev_id)));
             stationInfo.setStationName(station_name);
             StationInfo.DeviceID deviceID = factory.createStationInfoDeviceID();
             deviceID.setValue(path);
@@ -256,13 +256,13 @@ static   Exception makeXML(String path, List <Integer> analogs,List <Integer> bi
             analogchanels.setCount(analogs.size());
             for (int i:analogs)
             {
-                analogchanels.getANALOGCHANEL().add(makeAnal(i, factory));                
+                analogchanels.getANALOGCHANEL().add(this.makeAnal(i, factory));                
             }
         DigitalChanels digitalchanels = factory.createDigitalChanels();
             digitalchanels.setCount(binaries.size());
             for (int j:binaries)
             {
-                digitalchanels.getDIGITALCHANEL().add(makeDigital(j, factory));
+                digitalchanels.getDIGITALCHANEL().add(this.makeDigital(j, factory));
             }
         
         cfg.setSTATION(stationInfo);
@@ -280,10 +280,8 @@ static   Exception makeXML(String path, List <Integer> analogs,List <Integer> bi
         try {
             JAXBContext context = JAXBContext.newInstance(cfg.getClass().getPackage().getName());
             Marshaller marshaller = context.createMarshaller();
-            marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_ENCODING, "UTF-8"); //NOI18N
-            marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             SchemaFactory sfactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            Schema xsd = sfactory.newSchema(new File("./pliki_testowe/zapis.xsd"));
+            Schema xsd = sfactory.newSchema(new File("./pliki_testowe/zadanie_pop.cfg"));
             //marshaller.setSchema(xsd);
             OutputStream os = new FileOutputStream( path );
             marshaller.marshal( cfg, os );
@@ -296,16 +294,16 @@ static   Exception makeXML(String path, List <Integer> analogs,List <Integer> bi
         } 
         return null;
     }
-static    AnalogChanel makeAnal(int i, ObjectFactory factory){
+    AnalogChanel makeAnal(int i, ObjectFactory factory){
         
         AnalogChanel chanel = factory.createAnalogChanel();
         chanel.setChanelName(Analog[i].ch_id);
-        chanel.setChanelNumber(i+1);
+        chanel.setChanelNumber(i);
         chanel.setMaxValue(Float.toString(Analog[i].max));
         chanel.setMinValue(Float.toString(Analog[i].min));
         chanel.setMonitoredComponent(Analog[i].ccbm);
         chanel.setMultiplicity(Integer.toString(Analog[i].a));
-        chanel.setNr(BigInteger.valueOf(i+1));
+        chanel.setNr(BigInteger.valueOf(i));
         chanel.setOffset(Integer.toString(Analog[i].b));
         chanel.setPhaseID(Analog[i].ph);
         chanel.setPrimaryRatio(Integer.toString(Analog[i].primary));
@@ -319,14 +317,14 @@ static    AnalogChanel makeAnal(int i, ObjectFactory factory){
         return chanel;        
     }
     
-static    DigitalChanel makeDigital(int i, ObjectFactory factory){
+    DigitalChanel makeDigital(int i, ObjectFactory factory){
         
         DigitalChanel digit = factory.createDigitalChanel();
         digit.setChanelName(Binars[i].ch_id);
-        digit.setChanelNumber(i+1);
+        digit.setChanelNumber(i);
         digit.setMonitoredComponent(Binars[i].ccbm);
         digit.setNormalState(Binars[i].y);
-        digit.setNr(BigInteger.valueOf(i+1));
+        digit.setNr(BigInteger.valueOf(i));
         digit.setPhaseID(Binars[i].ph);
         return digit;
     }
@@ -398,14 +396,6 @@ class AnalogReceiver extends Receiver
 }
 class BinaryReceiver extends Receiver 
 {
-    BinaryReceiver()
-    {
-        index=0;
-        ch_id="";
-        ph="";
-        ccbm="";
-        y=0;
-    }
     BinaryReceiver(List<String> ls)
     {
         index = Integer.parseInt(ls.remove(0));
@@ -420,39 +410,5 @@ class BinaryReceiver extends Receiver
     @Override
     void resizeData() {
         this.data = new int[Dane.endsamp];
-    }
-    
-    BinaryReceiver negation(BinaryReceiver current)
-    {   
-        BinaryReceiver nowy = new BinaryReceiver();
-        nowy.resizeData();
-        for(int i=0;i<current.data.length;i++)
-            if(current.data[i]!=0)
-                nowy.data[i]=0;
-            else
-                nowy.data[i]=1;        
-        return nowy;
-    }
-        BinaryReceiver and(BinaryReceiver a, BinaryReceiver b)
-    {   
-        BinaryReceiver nowy = new BinaryReceiver();
-        nowy.resizeData();
-        for(int i=0;i<a.data.length;i++)
-            if((a.data[i]!=0)&&(b.data[i]!=0))
-                nowy.data[i]=1;
-            else
-                nowy.data[i]=0;        
-        return nowy;
-    }
-                BinaryReceiver or(BinaryReceiver a, BinaryReceiver b)
-    {   
-        BinaryReceiver nowy = new BinaryReceiver();
-        nowy.resizeData();
-        for(int i=0;i<a.data.length;i++)
-            if((a.data[i]==0)&&(b.data[i]==0))
-                nowy.data[i]=0;
-            else
-                nowy.data[i]=1;        
-        return nowy;
     }
 }
