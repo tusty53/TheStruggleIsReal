@@ -82,8 +82,8 @@ public class ViewReceivers extends javax.swing.JFrame {
         List<Integer> wynik = new ArrayList<>();
         for (int a=0; a<tab.length; a++)
         {
-            if (jTable2.getModel().getValueAt(tab[a],2)==Analog_text)  {if (!binary) wynik.add(tab[a]);}
-            else if (binary) wynik.add(tab[a]);
+            if (jTable2.getModel().getValueAt(tab[a],2)==Analog_text)  {if (!binary) wynik.add((int)jTable2.getModel().getValueAt(tab[a],0) - 1);}
+            else if (binary) wynik.add((int)jTable2.getModel().getValueAt(tab[a],0) - 1);
         }
         return wynik;
     }
@@ -212,6 +212,7 @@ public class ViewReceivers extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         List<Integer> binars = getSelectedReceivers(true);
         List<Integer> analogs = getSelectedReceivers(false);
+        System.out.println(binars.get(0));
         GetSavePath gsp = new GetSavePath(this, true);
         gsp.setVisible(true);
         String resultPath = gsp.getPath();
