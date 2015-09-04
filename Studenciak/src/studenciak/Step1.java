@@ -20,7 +20,7 @@ public class Step1 extends javax.swing.JFrame {
     }
     public void setProgress(float cur, float max)
     {
-         current.setText(cur+"/"+endsamp);
+         current.setText((int)cur+"/"+endsamp);
          progress.setValue( (int) ((cur/endsamp)*100));
     }
     public void setError(String title, String text)

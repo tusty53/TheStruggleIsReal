@@ -11,7 +11,10 @@ import generated.FreqSampling;
 import generated.ObjectFactory;
 import generated.StationInfo;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.math.BigInteger;
 import static java.nio.file.Files.readAllLines;
 import java.nio.file.Path;
@@ -20,8 +23,14 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.transform.Source;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import org.xml.sax.SAXException;
 
 public class Dane {
     static String station_name; //Name of substation location
@@ -212,15 +221,10 @@ public class Dane {
         return (Float.parseFloat(s1)+(float)Math.pow(10, Float.parseFloat(s2)));
     }
     
-    void makeXML(String path, int analogs[], int binaries[]){
+    Exception makeXML(String path, List <Integer> analogs,List <Integer> binaries){
         ObjectFactory factory=new ObjectFactory();
         
         CFG cfg = factory.createCFG();
-        try {
-            JAXBContext context = JAXBContext.newInstance(path);
-        } catch (JAXBException ex) {
-            Logger.getLogger(Dane.class.getName()).log(Level.SEVERE, null, ex);
-        }
         StationInfo stationInfo = factory.createStationInfo();
             
             stationInfo.setRevision(BigInteger.valueOf(Integer.valueOf(rec_dev_id)));
@@ -249,13 +253,13 @@ public class Dane {
             freqSampling.setSamplingFrequency(freqsamp);
         
         AnalogChanels analogchanels = factory.createAnalogChanels();
-            analogchanels.setCount(analogs.length);
+            analogchanels.setCount(analogs.size());
             for (int i:analogs)
             {
                 analogchanels.getANALOGCHANEL().add(this.makeAnal(i, factory));                
             }
         DigitalChanels digitalchanels = factory.createDigitalChanels();
-            digitalchanels.setCount(binaries.length);
+            digitalchanels.setCount(binaries.size());
             for (int j:binaries)
             {
                 digitalchanels.getDIGITALCHANEL().add(this.makeDigital(j, factory));
@@ -272,6 +276,23 @@ public class Dane {
         else cfg.setDATAFORMAT("Binary");
         cfg.setANALOGCHANELSDATA(analogchanels);
         cfg.setDIGITALCHANELSDATA(digitalchanels);
+        
+        try {
+            JAXBContext context = JAXBContext.newInstance(cfg.getClass().getPackage().getName());
+            Marshaller marshaller = context.createMarshaller();
+            SchemaFactory sfactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            Schema xsd = sfactory.newSchema(new File("./pliki_testowe/zadanie_pop.cfg"));
+            //marshaller.setSchema(xsd);
+            OutputStream os = new FileOutputStream( path );
+            marshaller.marshal( cfg, os );
+        } catch (JAXBException ex) {
+            return new Exception ("Context");
+        } catch (FileNotFoundException ex) {
+            return new Exception("Nie ma plika");
+        } catch (SAXException ex) {
+            return new Exception ("Schema error");
+        } 
+        return null;
     }
     AnalogChanel makeAnal(int i, ObjectFactory factory){
         
