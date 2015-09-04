@@ -212,7 +212,8 @@ public class Dane {
         return (Float.parseFloat(s1)+(float)Math.pow(10, Float.parseFloat(s2)));
     }
     
-    void makeXML(String path, int analogs[], int binaries[]){
+    static Exception makeXML(String path, List<Integer> analogs, List<Integer> binaries)
+    {
         ObjectFactory factory=new ObjectFactory();
         
         CFG cfg = factory.createCFG();
