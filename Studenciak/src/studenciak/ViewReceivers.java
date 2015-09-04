@@ -219,6 +219,7 @@ public class ViewReceivers extends javax.swing.JFrame {
         {
             Exception xml = Dane.makeXML(resultPath, analogs, binars);
             if (xml!=null) JOptionPane.showMessageDialog(this, "Wystąpił błąd: "+xml.getMessage());
+            else JOptionPane.showMessageDialog(this, resultPath+ "\n\nPlik zapisany zgodnie ze standardem.");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 

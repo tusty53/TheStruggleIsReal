@@ -28,8 +28,10 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 import org.xml.sax.SAXException;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.ChartUtilities;
@@ -173,8 +175,8 @@ public class Dane {
             nrates = Integer.parseInt(objs.remove(0));
             samp = Float.parseFloat(objs.remove(0));
             endsamp = Integer.parseInt(objs.remove(0));
-            date1 = objs.remove(0)+" "+objs.remove(0); //mozna miec osobno godz i date if needed
-            date2 = objs.remove(0)+" "+objs.remove(0);
+            date1 = objs.remove(0)+","+objs.remove(0); //mozna miec osobno godz i date if needed
+            date2 = objs.remove(0)+","+objs.remove(0);
             if (objs.remove(0).equals("ASCII")) ASCII = true; //default false
             timemult = Float.parseFloat(objs.remove(0));
         }
@@ -235,7 +237,7 @@ static   Exception makeXML(String path, List <Integer> analogs,List <Integer> bi
         CFG cfg = factory.createCFG();
         StationInfo stationInfo = factory.createStationInfo();
             
-            stationInfo.setRevision(BigInteger.valueOf(199));
+            stationInfo.setRevision(BigInteger.valueOf(1999));
             stationInfo.setStationName(station_name);
             StationInfo.DeviceID deviceID = factory.createStationInfoDeviceID();
             deviceID.setValue(path);
@@ -282,6 +284,7 @@ static   Exception makeXML(String path, List <Integer> analogs,List <Integer> bi
         cfg.setLASTSAMPLETIME(date2);
         if (ASCII) cfg.setDATAFORMAT("ASCII");
         else cfg.setDATAFORMAT("Binary");
+        cfg.setTIMEMULTIPLICATION(BigInteger.valueOf((int)timemult));
         cfg.setANALOGCHANELSDATA(analogchanels);
         cfg.setDIGITALCHANELSDATA(digitalchanels);
         
@@ -289,19 +292,27 @@ static   Exception makeXML(String path, List <Integer> analogs,List <Integer> bi
             JAXBContext context = JAXBContext.newInstance(cfg.getClass().getPackage().getName());
             Marshaller marshaller = context.createMarshaller();
             marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_ENCODING, "UTF-8"); //NOI18N
-            marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-            SchemaFactory sfactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            Schema xsd = sfactory.newSchema(new File("./pliki_testowe/zapis.xsd"));
-            //marshaller.setSchema(xsd);
+            marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);            
             OutputStream os = new FileOutputStream( path );
             marshaller.marshal( cfg, os );
+            
+            Source xmlFile = new StreamSource(new File(path));  
+            File schemaFile = new File("./pliki_testowe/zapis.xsd");
+            SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            Schema schema = schemaFactory.newSchema(schemaFile);
+            Validator validator = schema.newValidator();
+            validator.validate(xmlFile);
+            System.out.println(xmlFile.getSystemId() + " is valid");
+            
         } catch (JAXBException ex) {
             return new Exception ("Context");
         } catch (FileNotFoundException ex) {
             return new Exception("Nie ma plika");
         } catch (SAXException ex) {
-            return new Exception ("Schema error");
-        } 
+            return new Exception ("schema");
+        } catch (IOException ex) {
+            return new Exception ("Nie ma na to zgody");
+        }  
         return null;
     }
     static AnalogChanel makeAnal(int i, ObjectFactory factory){
@@ -453,7 +464,7 @@ class BinaryReceiver extends Receiver
                 nowy.data[i]=0;        
         return nowy;
     }
-                BinaryReceiver or(BinaryReceiver a, BinaryReceiver b)
+        BinaryReceiver or(BinaryReceiver a, BinaryReceiver b)
     {   
         BinaryReceiver nowy = new BinaryReceiver();
         nowy.resizeData();

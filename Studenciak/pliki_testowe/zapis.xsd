@@ -1,27 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 2014 (c) Andrzej Kwapisz -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-	<xs:element name="COMTRADE">
+	<xs:element  name="CFG">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element name="INFO" type="conversionInfo" minOccurs="1" maxOccurs="1"/>
-				<xs:element  name="CFG" minOccurs="1" maxOccurs="1">
-					<xs:complexType>
-						<xs:sequence>
-							<xs:element name="STATION" type="stationInfo" minOccurs="1" maxOccurs="1"/>
-							<xs:element name="CHANELS" type="chanelsCount" minOccurs="1" maxOccurs="1"/>
-							<xs:element name="FREQUENCY" type="freq" minOccurs="1" maxOccurs="1"/>
-							<xs:element name="SAMPLING_FREQ_COUNT" type="xs:positiveInteger" minOccurs="1" maxOccurs="1" fixed="1"/>
-							<xs:element name="SAMPLING_DATA" type="freqSampling" minOccurs="1" maxOccurs="1"/>
-							<xs:element name="FIRST_SAMPLE_TIME" type="timeStamp" minOccurs="1" maxOccurs="1"/>
-							<xs:element name="LAST_SAMPLE_TIME" type="timeStamp" minOccurs="1" maxOccurs="1"/>
-							<xs:element name="DATA_FORMAT" type="dataFormat" minOccurs="1" maxOccurs="1"/>
-							<xs:element name="TIME_MULTIPLICATION" type="xs:positiveInteger" default="1" minOccurs="1" maxOccurs="1"/>
-							<xs:element name="ANALOG_CHANELS_DATA" type="analogChanels" minOccurs="1" maxOccurs="1"/>  
-							<xs:element name="DIGITAL_CHANELS_DATA" type="digitalChanels" minOccurs="1" maxOccurs="1"/>  
-						</xs:sequence>
-					</xs:complexType>
-				</xs:element>
+				<xs:element name="STATION" type="stationInfo" minOccurs="1" maxOccurs="1"/>
+				<xs:element name="CHANELS" type="chanelsCount" minOccurs="1" maxOccurs="1"/>
+				<xs:element name="FREQUENCY" type="freq" minOccurs="1" maxOccurs="1"/>
+				<xs:element name="SAMPLING_FREQ_COUNT" type="xs:positiveInteger" minOccurs="1" maxOccurs="1" fixed="1"/>
+				<xs:element name="SAMPLING_DATA" type="freqSampling" minOccurs="1" maxOccurs="1"/>
+				<xs:element name="FIRST_SAMPLE_TIME" type="timeStamp" minOccurs="1" maxOccurs="1"/>
+				<xs:element name="LAST_SAMPLE_TIME" type="timeStamp" minOccurs="1" maxOccurs="1"/>
+				<xs:element name="DATA_FORMAT" type="dataFormat" minOccurs="1" maxOccurs="1"/>
+				<xs:element name="TIME_MULTIPLICATION" type="xs:positiveInteger" default="1" minOccurs="1" maxOccurs="1"/>
+				<xs:element name="ANALOG_CHANELS_DATA" type="analogChanels" minOccurs="1" maxOccurs="1"/>  
+				<xs:element name="DIGITAL_CHANELS_DATA" type="digitalChanels" minOccurs="1" maxOccurs="1"/>  
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
